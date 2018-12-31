@@ -59,7 +59,6 @@ elif banknaam.lower() == 'abn':
 else:
     print('bank niet ondersteund')
 
-print(csvList)
 print(outputfile)
 with open(os.path.splitext(arginputfile)[0] + '.out.csv', 'w') as outfile:
     outfile.write('Date,Payee,Category,Memo,Outflow,Inflow\n')
