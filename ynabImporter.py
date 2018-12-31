@@ -24,25 +24,25 @@ with open("reknaammatch.json") as reknaammatch:
 with open("reknrmatch.json") as reknrmatch:
     rekNrDict = json.load(reknrmatch)
 
-def ynabDate(inputLijst):
-    datum = re.sub(r'-',r'/',inputLijst[1])
+def ynabDate(datumstring):
+    datum = re.sub(r'-',r'/',datumstring)
     return(datum)
     
-def ynabPayee(inputLijst):
-    if inputLijst[5] in rekNrDict.keys():
-        return rekNrDict[inputLijst[5]]
-    elif len(inputLijst[5])>1:
-        return inputLijst[5]
-    elif inputLijst[6] in rekNaamDict.keys():
-        return rekNaamDict[inputLijst[6]]
+def ynabPayee(rekeningNummer, rekeningHouder):
+    if rekeningNummer in rekNrDict.keys():
+        return rekNrDict[rekeningNummer]
+    elif len(rekeningNummer)>1:
+        return rekeningNummer
+    elif rekeningHouder in rekNaamDict.keys():
+        return rekNaamDict[rekeningHouder]
     else:
-        return inputLijst[6].title()
+        return rekeningHouder.title()
 
-def ynabBedrag(inputLijst):
-    waarde = re.sub(r',',r'.',inputLijst[4])
-    if inputLijst[3] == 'C':
+def ynabBedrag(debetCredit, bedrag):
+    waarde = re.sub(r',',r'.',bedrag)
+    if debetCredit == 'C':
         return(',' + waarde)
-    elif inputLijst[3] == 'D':
+    elif debetCredit == 'D':
         return(waarde + ',')
 
 def generateYNABfromKNAB(inputfile):
@@ -50,7 +50,7 @@ def generateYNABfromKNAB(inputfile):
         bankReader = csv.reader(csvfile, delimiter=";", quotechar='\"')
         for row in bankReader:
             if ibanRegex.findall(row[0]):
-                csvList.append(ynabDate(row) + ',' + ynabPayee(row) + ',,,' + ynabBedrag(row))
+                csvList.append(ynabDate(row[1]) + ',' + ynabPayee(row[5], row[6]) + ',,,' + ynabBedrag(row[3], row[4]))
 
 if banknaam.lower() == 'knab':
     generateYNABfromKNAB(arginputfile)
