@@ -11,13 +11,13 @@ if len(sys.argv) < 3:
 elif sys.argv[1] == 'help':
     print('Gebruik: twee argumenten: (knab|abn) en filename van de csv')
     sys.exit()
-print(sys.argv)
 
 banknaam = sys.argv[1]
 arginputfile = sys.argv[2]
 outputfile = os.path.splitext(arginputfile)[0] + '.out.csv'
 ibanRegex = re.compile(r'^[a-zA-Z]{2}\d{2}[a-zA-Z0-9]{4}\d{7}([a-zA-Z0-9]?){0,16}$')
 csvList = []
+count = 0
 
 with open("reknaammatch.json") as reknaammatch:
     rekNaamDict = json.load(reknaammatch)
@@ -59,8 +59,10 @@ elif banknaam.lower() == 'abn':
 else:
     print('bank niet ondersteund')
 
-print(outputfile)
 with open(os.path.splitext(arginputfile)[0] + '.out.csv', 'w') as outfile:
     outfile.write('Date,Payee,Category,Memo,Outflow,Inflow\n')
     for i in csvList:
+        count += 1
         outfile.write(i + '\n')
+
+print(str(count) + ' transacties naar ' + os.path.splitext(arginputfile)[0] + '.out.csv geschreven.')
