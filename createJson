@@ -1,0 +1,92 @@
+import csv
+import json
+import sys
+import re
+
+if len(sys.argv) < 3:
+    print('Gebruik: twee argumenten: (knab|abn) en filename van de csv')
+    sys.exit()
+elif sys.argv[1] == 'help':
+    print('Gebruik: twee argumenten: (knab|abn) en filename van de csv')
+    sys.exit()
+    
+print(sys.argv)
+banknaam = sys.argv[1]
+arginputfile = sys.argv[2]
+rekNaamList = []
+rekNrList = []
+rekNaamDict = {}
+rekNrDict = {}
+ibanRegex = re.compile(r'^[a-zA-Z]{2}\d{2}[a-zA-Z0-9]{4}\d{7}([a-zA-Z0-9]?){0,16}$')
+
+def dumpInLijst(rekeningNummer, rekeningHouder):
+    if rekeningHouder not in rekNaamList:
+        rekNaamList.append(rekeningHouder)
+    if rekeningNummer not in rekNrList:
+        rekNrList.append(rekeningNummer)
+
+
+def updateDict(rekeningNummer, rekeningHouder):
+#Check naam bij rekeningnummer in reknrmatch en schrijf die vervolgens naar de value
+    rekNrDict.update({rekeningNummer:rekeningHouder})
+#Verwijder alle namen uit de rekNaamDict als er een rekNr bekend is
+    if rekeningHouder in rekNaamDict.keys():
+        if len(rekeningNummer)>2:
+            rekNaamDict.pop(rekeningHouder)
+
+def generateKNAB(inputfile):
+    with open (inputfile, newline='') as csvfile:
+        bankReader = csv.reader(csvfile, delimiter=";", quotechar='\"')
+        for row in bankReader:
+            if ibanRegex.findall(row[0]):
+                dumpInLijst(row[5], row[6])
+
+    rekNaamList.sort()
+    for i in rekNaamList:
+        rekNaamDict.update({i: "onbekend"})
+    
+    rekNrList.sort()
+    for i in rekNrList:
+        rekNrDict.update({i: "onbekend"})
+    
+    with open (inputfile, newline='') as csvfile:
+        bankReader = csv.reader(csvfile, delimiter=";", quotechar='\"')
+        for row in bankReader:
+            if ibanRegex.findall(row[0]):
+                updateDict(row[5], row[6])
+
+
+#TODO: deze definitie schrijven            
+def generateABN(inputfile):
+    with open (inputfile, newline='') as csvfile:
+        bankReader = csv.reader(csvfile, delimiter=";", quotechar='\"')
+        for row in bankReader:
+            dumpInLijst(row[5], row[6])
+
+    rekNaamList.sort()
+    for i in rekNaamList:
+        rekNaamDict.update({i: "onbekend"})
+    
+    rekNrList.sort()
+    for i in rekNrList:
+        rekNrDict.update({i: "onbekend"})
+    
+    with open (inputfile, newline='') as csvfile:
+        bankReader = csv.reader(csvfile, delimiter=";", quotechar='\"')
+        for row in bankReader:
+            updateDict(row[5], row[6])
+            
+ 
+if banknaam.lower() == 'knab':
+    generateKNAB(arginputfile)
+elif banknaam.lower() == 'abn':
+    print('generateABN(inputfile)')
+else:
+    print('bank niet ondersteund')
+
+
+with open("reknrmatch.json",'w') as outfilerek:
+    json.dump(rekNrDict, outfilerek, indent=2)
+    
+with open("reknaammatch.json",'w') as outfilenaam:
+    json.dump(rekNaamDict, outfilenaam, indent=2)
