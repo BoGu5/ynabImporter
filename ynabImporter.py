@@ -15,7 +15,7 @@ elif sys.argv[1] == 'help':
 
 #Lees de argumenten van de commandline
 argbanknaam = sys.argv[1]
-arginputfile = '/"' + sys.argv[2] '/"'
+arginputfile = '/"' + sys.argv[2] + '/"'
 #Bepaal de outputfile
 outputfile = os.path.splitext(arginputfile)[0] + '.out.csv'
 #De regexxen om bepaalde transacties te identificeren
