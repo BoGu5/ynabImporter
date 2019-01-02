@@ -61,6 +61,8 @@ def ynabPayeeKNAB(rekeningNummer, rekeningHouder):
 def ynabMemoKNAB(betaalwijze, memoveld):
     if betaalwijze != 'Betaalautomaat':
         return re.sub(r',',r'.',memoveld)
+    else: 
+        return ''
     
 
 def ynabPayeeABN(commentaarvak):
