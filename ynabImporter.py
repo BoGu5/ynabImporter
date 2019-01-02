@@ -12,7 +12,7 @@ if len(sys.argv) < 3:
 elif sys.argv[1] == 'help':
     print('Gebruik: twee argumenten: (knab|abn) en filename van de csv')
     sys.exit()
-print(sys.argv)
+
 #Lees de argumenten van de commandline
 argbanknaam = sys.argv[1]
 arginputfile = sys.argv[2]
@@ -57,6 +57,11 @@ def ynabPayeeKNAB(rekeningNummer, rekeningHouder):
         return rekNaamDict[rekeningHouder]
     else:
         return rekeningHouder.title() #Anders geef ruw de rekeningHouder terug
+
+def ynabMemoKNAB(betaalwijze, memoveld):
+    if betaalwijze != 'Betaalautomaat':
+        return re.sub(r',',r'.',memoveld)
+    
 
 def ynabPayeeABN(commentaarvak):
     omschrijving = None
@@ -126,7 +131,7 @@ def generateYNABfromKNAB(inputfile, banknaam):
         bankReader = csv.reader(csvfile, delimiter=";", quotechar='\"') #Lees deze als csv in
         for row in bankReader: #Loop de regels af
             if ibanRegex.findall(row[0]): #kijk of de zin in de csv begint met een IBAN
-                csvList.append(ynabDate(row[1], banknaam) + ',' + ynabPayeeKNAB(row[5], row[6]) + ',,' + row[9] + ',' + ynabBedrag(row[3], row[4], banknaam)) # Schrijf alle waarden naar een list
+                csvList.append(ynabDate(row[1], banknaam) + ',' + ynabPayeeKNAB(row[5], row[6]) + ',,' + ynabMemoKNAB(row[8],row[9]) + ',' + ynabBedrag(row[3], row[4], banknaam)) # Schrijf alle waarden naar een list
 
 def generateYNABfromABN(inputfile, banknaam):
     with open(inputfile, newline='') as csvfile: #Open de inputfile 
