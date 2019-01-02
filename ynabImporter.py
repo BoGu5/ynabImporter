@@ -12,10 +12,10 @@ if len(sys.argv) < 3:
 elif sys.argv[1] == 'help':
     print('Gebruik: twee argumenten: (knab|abn) en filename van de csv')
     sys.exit()
-
+print(sys.argv)
 #Lees de argumenten van de commandline
 argbanknaam = sys.argv[1]
-arginputfile = '/"' + sys.argv[2] + '/"'
+arginputfile = sys.argv[2]
 #Bepaal de outputfile
 outputfile = os.path.splitext(arginputfile)[0] + '.out.csv'
 #De regexxen om bepaalde transacties te identificeren
