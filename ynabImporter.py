@@ -126,7 +126,7 @@ def generateYNABfromKNAB(inputfile, banknaam):
         bankReader = csv.reader(csvfile, delimiter=";", quotechar='\"') #Lees deze als csv in
         for row in bankReader: #Loop de regels af
             if ibanRegex.findall(row[0]): #kijk of de zin in de csv begint met een IBAN
-                csvList.append(ynabDate(row[1], banknaam) + ',' + ynabPayeeKNAB(row[5], row[6]) + ',,,' + ynabBedrag(row[3], row[4], banknaam)) # Schrijf alle waarden naar een list
+                csvList.append(ynabDate(row[1], banknaam) + ',' + ynabPayeeKNAB(row[5], row[6]) + ',,' row[9] + ',' + ynabBedrag(row[3], row[4], banknaam)) # Schrijf alle waarden naar een list
 
 def generateYNABfromABN(inputfile, banknaam):
     with open(inputfile, newline='') as csvfile: #Open de inputfile 
