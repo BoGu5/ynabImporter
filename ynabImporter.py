@@ -19,7 +19,7 @@ arginputfile = sys.argv[2]
 #Bepaal de outputfile
 outputfile = os.path.splitext(arginputfile)[0] + '.out.csv'
 #De regexxen om bepaalde transacties te identificeren
-ibanRegex = re.compile(r'^[a-zA-Z]{2}\d{2}[a-zA-Z0-9]{4}\d{7}([a-zA-Z0-9]?){0,16}&')
+ibanRegex = re.compile(r'^[a-zA-Z]{2}\d{2}[a-zA-Z0-9]{4}\d{7}([a-zA-Z0-9]?){0,16}$')
 sepaRegex = re.compile(r"[a-zA-Z]{2}\d{2}[a-zA-Z0-9]{4}\d{7}([a-zA-Z0-9]?){0,16}")
 beaRegex = re.compile(r'^BEA.*PAS\d{3}')
 geaRegex = re.compile(r'^GEA.*PAS\d{3}')
