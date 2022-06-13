@@ -26,7 +26,9 @@ geaRegex = re.compile(r'^GEA.*PAS\d{3}')
 stortingRegex = re.compile(r'^STORTING')
 omschrijvingRemiRegex = re.compile(r'/REMI/(.*)/EREF/')
 omschrijvingKenmerkRegex = re.compile(r'Omschrijving: (.*)Kenmerk:')
-pinInWinkelRegex = re.compile(r'\d{2}\.\d{2}\.\d{2}\/\d{2}\.\d{2} (.*),PAS\d{3}')
+#pinInWinkelRegex = re.compile(r'\d{2}\.\d{2}\.\d{2}\/\d{2}\.\d{2} (.*),PAS\d{3}')
+#de regex na ABN update
+pinInWinkelRegex = re.compile(r'\s{3,} (.*),PAS\d{3}')
 
 #De csvlijst waar alles in komt
 csvList = []
@@ -85,6 +87,7 @@ def ynabPayeeABN(commentaarvak):
     #PIN: 
     #BETAALAUTOMAAT
     #BEA   NR:Z1X3X9   01.01.19/13.15 Gebr. Van Beek Kaash VEE,PAS111
+    #BEA, Apple Pay                   Albert Heijn,PAS154             NR:49CT8D   15.04.22/08.17       ZAANDAM                 
     elif beaRegex.search(commentaarvak):
         gepind = pinInWinkelRegex.search(commentaarvak)
         rekeningHouder = gepind.group(1)
